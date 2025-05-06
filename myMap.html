@@ -49,17 +49,28 @@
     let userMarker = null;
     let rangeCircle = null;
     let alarmTriggered = false;
+    let audio = new Audio('https://www.soundjay.com/buttons/beep-07.wav');
+
+    // Ensure sound only works after user interaction (required by mobile browsers)
+    let hasInteracted = false;
+    map.on('click', function() {
+      if (!hasInteracted) {
+        // Allow sound to play after the first interaction
+        hasInteracted = true;
+      }
+    });
+
+    // Function to play sound
+    function playAlarm() {
+      if (hasInteracted) {
+        audio.play();
+      }
+    }
 
     // Add OpenStreetMap tiles
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap contributors'
     }).addTo(map);
-
-    // Function to play sound
-    function playAlarm() {
-      const audio = new Audio('https://www.soundjay.com/buttons/beep-07.wav');
-      audio.play();
-    }
 
     // Track and update user's location
     if (navigator.geolocation) {
