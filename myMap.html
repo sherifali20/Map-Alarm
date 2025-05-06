@@ -41,31 +41,47 @@
     <input type="number" id="radius" class="form-control" placeholder="Enter radius in pixels">
   </div>
 
+  <!-- Stop Alarm Button -->
+  <div class="text-center">
+    <button id="stopBtn" class="btn btn-danger" style="display: none;">Stop Alarm</button>
+  </div>
+
   <script>
     const map = L.map('map');
     const circle = document.getElementById("circle");
     const radiusInput = document.getElementById("radius");
+    const stopBtn = document.getElementById("stopBtn");
+
     let currentMarker = null;
     let userMarker = null;
     let rangeCircle = null;
     let alarmTriggered = false;
     let audio = new Audio("doodle.m4a");
+    audio.loop = true;
 
     // Ensure sound only works after user interaction (required by mobile browsers)
     let hasInteracted = false;
-    map.on('click', function() {
+    map.on('click', function () {
       if (!hasInteracted) {
-        // Allow sound to play after the first interaction
         hasInteracted = true;
       }
     });
 
-    // Function to play sound
+    // Function to play sound and show stop button
     function playAlarm() {
       if (hasInteracted) {
-        audio.play();
+        audio.play().catch(err => console.log("Playback issue:", err));
+        stopBtn.style.display = "inline-block";
       }
     }
+
+    // Stop alarm handler
+    stopBtn.addEventListener("click", () => {
+      audio.pause();
+      audio.currentTime = 0;
+      stopBtn.style.display = "none";
+      alarmTriggered = false;
+    });
 
     // Add OpenStreetMap tiles
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -106,6 +122,7 @@
               }
             } else {
               alarmTriggered = false;
+              stopBtn.style.display = "none";
             }
           }
         },
@@ -125,7 +142,7 @@
     }
 
     // Handle map click
-    map.on('click', function(e) {
+    map.on('click', function (e) {
       const latlng = e.latlng;
 
       if (currentMarker) {
@@ -139,7 +156,6 @@
         .bindPopup("You clicked here:<br>" + latlng.lat.toFixed(5) + ", " + latlng.lng.toFixed(5))
         .openPopup();
 
-      // Create a circle (in meters, not px) based on input
       const radiusValue = parseInt(radiusInput.value);
       const meterRadius = !isNaN(radiusValue) && radiusValue > 0 ? radiusValue : 50;
 
