@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Map Centered on My Location</title>
+  <title>Map Alarm</title>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -32,19 +32,25 @@
   </style>
 </head>
 <body>
-  <h3 class="p-2">Map Centered on Your Location</h3>
-  <div id="map">
-    <div class="rounded-circle position-absolute" id="circle"></div>
-  </div>
-  <div class="p-3">
-    <label for="radius" class="form-label">Radius (in px):</label>
-    <input type="number" id="radius" class="form-control" placeholder="Enter radius in pixels">
-  </div>
-
-  <!-- Stop Alarm Button -->
+  <div class="container rounded bg-primary my-3 pb-3">
+    <div class="p-3">
+      <label for="radius" class="form-label text-light">Radius (in px):</label>
+      <input type="number" id="radius" class="form-control mx-auto" placeholder="Enter radius in pixels">
+    </div>
+    <h3 class="p-2 text-light">Put Your pin.</h3>
+    <div id="map" >
+      <div class="rounded-circle position-absolute" id="circle"></div>
+    </div> 
+    <!-- Stop Alarm Button -->
   <div class="text-center">
     <button id="stopBtn" class="btn btn-danger" style="display: none;">Stop Alarm</button>
   </div>
+  <div class="text-end pt-2">by Sherif Ali</div>
+  </div>
+  
+  
+
+  
 
   <script>
     const map = L.map('map');
